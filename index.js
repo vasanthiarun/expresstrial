@@ -36,6 +36,19 @@ app.get('/users',  (request, response) =>{
 
 });
 
+//create new user
+app.get('/user',  (request, response) => {
+	const {name, email}  = request.query;
+	const sql = 'insert into users (name, email) values ("'+name+'", "' + email + '")';
+	console.log(sql);
+	db.query(sql, (err,result) => {
+		if(err)
+			response.send(err.code);
+		response.status(201).send({id: result.insertId, name, email});
+	});
+});
+
+
 // Start the server on port 5000
 app.listen(5000, () => {
     console.log('Server listening at http://localhost:5000');
