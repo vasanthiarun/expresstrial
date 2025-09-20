@@ -1,9 +1,10 @@
 const express = require('express');
+const cors = require('cors');
 const mysql = require('mysql');
 
 // Initialize Express application
 const app = express();
-
+app.use(cors());
 
 // MySQL connection setup
 const db = mysql.createConnection({
@@ -27,7 +28,7 @@ app.get('/', (req, res) => {
 
 //list users
 app.get('/users',  (request, response) =>{
-	const sql = 'select name, email from users';
+	const sql = 'select id, name, email from users';
 	db.query(sql, (err, records) => {
 		if(err)
 			response.send(err.code);
@@ -46,6 +47,17 @@ app.get('/user',  (request, response) => {
 			response.send(err.code);
 		response.status(201).send({id: result.insertId, name, email});
 	});
+});
+
+//
+app.get('/useredit',  (request, response) =>{
+	const sql = 'select id, name, email from users where id = 1';
+	db.query(sql, (err, records) => {
+		if(err)
+			response.send(err.code);
+		response.status(201).send(records[0]);
+	});
+
 });
 
 
