@@ -1,19 +1,32 @@
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('./db'); 
-const QuestionPaper = require("./models/question_paper.model.js");
-// Import router
-const questionPaperRoutes = require('./routes/question_paper.route.js');
+const db = require('mongoose');
+
+db.connect("mongodb://localhost:27017/cruddb")
+.then(() => {
+    console.log('Connected to the database');
+})
+.catch((error) => {
+    console.log('Connection failed', error);
+});
+
 // Initialize Express application
 const app = express();
+
 app.use(cors());
 app.use(express.json());
-// Mount router
-app.use('/', questionPaperRoutes); 
+
 
 // Define route handler for GET requests to '/'
 app.get('/', (req, res) => {
     res.send('Hello World\n');
+});
+
+app.get('/list', async(req, res) => {	
+	const collection_table  = await db.connection.collection('questionpapers');
+	const records = await collection_table.find({}).toArray();
+	res.json(records);
+	
 });
 
 
