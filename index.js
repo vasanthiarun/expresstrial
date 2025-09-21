@@ -1,24 +1,15 @@
 const express = require('express');
 const cors = require('cors');
-const mysql = require('mysql');
-
+const mongoose = require('./db'); 
+const QuestionPaper = require("./models/question_paper.model.js");
+// Import router
+const questionPaperRoutes = require('./routes/question_paper.route.js');
 // Initialize Express application
 const app = express();
 app.use(cors());
-
-// MySQL connection setup
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '', // Add your MySQL password
-    database: 'crud_example'
-});
-
-// Connect to MySQL
-db.connect((err) => {
-    if (err) throw err;
-    console.log('MySQL connected...');
-});
+app.use(express.json());
+// Mount router
+app.use('/', questionPaperRoutes); 
 
 // Define route handler for GET requests to '/'
 app.get('/', (req, res) => {
@@ -26,42 +17,8 @@ app.get('/', (req, res) => {
 });
 
 
-//list users
-app.get('/users',  (request, response) =>{
-	const sql = 'select id, name, email from users';
-	db.query(sql, (err, records) => {
-		if(err)
-			response.send(err.code);
-		response.status(201).send(records);
-	});
-
-});
-
-//create new user
-app.get('/user',  (request, response) => {
-	const {name, email}  = request.query;
-	const sql = 'insert into users (name, email) values ("'+name+'", "' + email + '")';
-	console.log(sql);
-	db.query(sql, (err,result) => {
-		if(err)
-			response.send(err.code);
-		response.status(201).send({id: result.insertId, name, email});
-	});
-});
-
-//
-app.get('/useredit',  (request, response) =>{
-	const sql = 'select id, name, email from users where id = 1';
-	db.query(sql, (err, records) => {
-		if(err)
-			response.send(err.code);
-		response.status(201).send(records[0]);
-	});
-
-});
-
-
 // Start the server on port 5000
 app.listen(5000, () => {
     console.log('Server listening at http://localhost:5000');
 });
+
