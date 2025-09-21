@@ -29,6 +29,24 @@ app.get('/list', async(req, res) => {
 	
 });
 
+app.post('/create', async (req, res) => {
+	console.log('Received form data:',req.body);
+	data = req.body;
+	insert_obj = {
+			"regulation": data.regulation,
+			"semester": data.semester,
+			"subjectCode": data.subjectCode,
+			"year": data.year,
+			"exam": data.exam,
+			"url": data.url
+	}
+
+	const collection_table  = await db.connection.collection('questionpapers');
+	insert_rec = await collection_table.insertOne(insert_obj);
+	res.status(200).json(insert_rec);
+});
+
+
 
 // Start the server on port 5000
 app.listen(5000, () => {
