@@ -7,3 +7,5 @@ CREATE TABLE users (
 );
 
 npm install express mongoose body-parser nodemon
+
+ npm install -g nodemon - installed globally and run using nodemon index.js
