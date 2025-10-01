@@ -4,12 +4,14 @@ const mongoose = require('./db');
 const User = require("./models/user.model.js");
 // Import router
 const userRoutes = require('./routes/user.route.js');
+const testRoutes = require('./routes/test.route.js');
 // Initialize Express application
 const app = express();
 app.use(cors());
 app.use(express.json());
 // Mount router
 app.use('/', userRoutes); 
+app.use('/', testRoutes); 
 
 // Define route handler for GET requests to '/'
 app.get('/', (req, res) => {
@@ -22,3 +24,4 @@ app.listen(5000, () => {
     console.log('Server listening at http://localhost:5000');
 });
 
+//https://www.corbado.com/blog/nodejs-express-mongodb-jwt-authentication-roles#42-setup-express-web-server
