@@ -6,6 +6,7 @@ const User = require("./models/user.model.js");
 // Import router
 const userRoutes = require('./routes/user.route.js');
 const testRoutes = require('./routes/test.route.js');
+const manageUserRoutes = require('./routes/admin_manage_user.route.js');
 // Initialize Express application
 const app = express();
 app.use(cors({
@@ -17,6 +18,7 @@ app.use(express.json());
 // Mount router
 app.use('/', userRoutes); 
 app.use('/', testRoutes); 
+app.use('/', manageUserRoutes); 
 
 // Define route handler for GET requests to '/'
 app.get('/', (req, res) => {
