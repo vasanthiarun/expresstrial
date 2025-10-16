@@ -3,7 +3,6 @@ const config = require("../config/auth.config.js");
 //import jwt from "jsonwebtoken"; //this didn't work, need to change 
 const jwt = require("jsonwebtoken");
 
-
 const register = async (req, res) => {
   try {
 	console.log('Received form data:'+req.body);
@@ -55,12 +54,20 @@ const login = async (req, res) => {
             algorithm: "HS256",
             expiresIn: 86400, // 24 hours
     });
+	res.cookie('accessToken', token, {
+				    httpOnly: true,
+		 		   secure: false,          // set to true if using HTTPS
+				   sameSite: 'lax',        // or 'none' if cross-origin with secure
+				   maxAge: 24 * 60 * 60 * 1000 // 1 day
+				 }
+			);
+    console.log(user.user_access); 
 	res.status(200).json({
             id: user._id,
             username: user.display_name,
             email: user.email,
             roles: user.user_access,
-            accessToken: token,
+          //  accessToken: token,
         });
 	
   }
@@ -69,8 +76,25 @@ const login = async (req, res) => {
   }
 };
 
+const getLoggedUser = async(req, res) =>
+{	
+	res.status(200).json({
+            id: req.user._id,
+            username: req.user.display_name,
+            email: req.user.email,
+            roles: req.user.user_access,
+
+        });
+};
+
+const logout = async(req, res) =>
+{	
+	 res.clearCookie("accessToken");
+	 res.json({ message: 'loggedout' });
+	 
+};
 
 
 module.exports = {
-  register, login
+  register, login, getLoggedUser, logout
 };

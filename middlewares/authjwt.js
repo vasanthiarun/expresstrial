@@ -7,16 +7,17 @@ const User = require("../models/user.model.js");
  
  
 const verifyToken = async (req, res, next) => {
-    let token = req.headers["x-access-token"] || req.headers["authorization"];
- 
-    if (!token) {
+    //let token = req.headers["x-access-token"] || req.headers["authorization"];
+	 let token  = req.cookies.accessToken;
+     console.log('Verify Token');
+     if (!token) {
         return res.status(403).json({ message: "No token provided!" });
-    }
- 
+     }
+	 console.log('Verify Token Outside');
     // Remove 'Bearer ' prefix if present
-    if (token.startsWith("Bearer ")) {
+    /*if (token.startsWith("Bearer ")) {
         token = token.slice(7, token.length);
-    }
+    }*/
  
     try {
         const decoded = jwt.verify(token, config.secret);

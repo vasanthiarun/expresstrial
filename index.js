@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const mongoose = require('./db'); 
 const User = require("./models/user.model.js");
 // Import router
@@ -7,7 +8,11 @@ const userRoutes = require('./routes/user.route.js');
 const testRoutes = require('./routes/test.route.js');
 // Initialize Express application
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000', // frontend origin
+  credentials: true                // allow cookies to be sent
+}));
+app.use(cookieParser());
 app.use(express.json());
 // Mount router
 app.use('/', userRoutes); 
